@@ -12,25 +12,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Set seed for reproducibility
-np.random.seed(2025)
 
-def generate_synthetic_lasso(n=200, p=500, s=20, noise_std=0.1):
+def generate_synthetic_lasso(n=200, p=500, s=20, noise_std=0.1, seed=42): # Set seed for reproducibility
     """
-    Generates synthetic data for Lasso regression: y = Ax + noise
+    Generates synthetic data matching the original notebook exactly.
     """
+    # Use the same generator as the notebook
+    rng = np.random.default_rng(seed)
+
     # Design matrix
-    A = np.random.normal(size=(n, p))
-    
+    A = rng.normal(size=(n, p))
+
     # True sparse vector
     x_true = np.zeros(p)
-    support = np.random.choice(p, size=s, replace=False)
-    x_true[support] = np.random.normal(size=s)
-    
+    support = rng.choice(p, size=s, replace=False)
+    x_true[support] = rng.normal(size=s)
+
     # Noise
-    noise = noise_std * np.random.normal(size=n)
+    noise = noise_std * rng.normal(size=n)
     b = A @ x_true + noise
-    
+
     return A, b, x_true
 
 def lasso_objective(A, b, x, lam):
